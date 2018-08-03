@@ -128,6 +128,7 @@ def xlsxChart(fileName, type, headerLists, valueLists):
 	endIndex = index + 2
 	print("endIndex", endIndex)
 	chart_col = chartType(type, workBook, endIndex)
+	chart_col.set_legend({'delete_series': [2, 3]})
 	#插入图表
 	workSheet.insert_chart('A'+str(endIndex), chart_col, {'x_offset': 25, 'y_offset': 30})
 	workBook.close()

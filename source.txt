@@ -1,15 +1,16 @@
-﻿2018:22:17:00sdfafPoint.1.2sadfagopt1:"11"fdsfopt2:"22"fsdfs
+﻿2018:22:17:00sdfafPoint.1.1sadfagopt1:"11"fdsfopt2:"22"fsdfs
 2018:22:17:00sdfafPoint.1.1sadfagopt1:"12"fdsfopt2:"21"fsdfs
-2018:22:17:00sdfafPoint.1.3sadfagopt1:"14"fdsfopt2:"20"fsdfs
+2018:22:17:00sdfafPoint.1.2sadfagopt1:"14"fdsfopt2:"20"fsdfs
 2018:22:17:00sdfafPoint.1.2sadfagopt1:"13"fdsfopt2:"29"fsdfs
-2018:22:17:00sdfafPoint.1.3sadfagopt1:"15"fdsfopt2:"28"fsdfs
+2018:22:17:00sdfafPoint.1.2sadfagopt1:"15"fdsfopt2:"28"fsdfs
 2018:22:17:00sdfafPoint.1.1sadfagopt1:"16"fdsfopt2:"27"fsdfs
 2018:22:17:00sdfafPoint.2.2sadfagopt1:"17"fdsfopt2:"26"fsdfs
 2018:22:17:00sdfafPoint.2.3sadfagopt1:"18"fdsfopt2:"25"fsdfs
 2018:22:17:00sdfafPoint.2.2sadfagopt1:"19"fdsfopt2:"24"fsdfs
-2018:22:17:00sdfafPoint.2.1sadfagopt1:"12"fdsfopt2:"23"fsdfs
+2018:22:17:00sdfafPoint.2.2sadfagopt1:"12"fdsfopt2:"23"fsdfs
 2018:22:17:00sdfafPoint.2.3sadfagopt1:"11"fdsfopt2:"22"fsdfs
-2018:22:17:00adgauighuajiang ui au oh oashdoah  dhaoshdo 
+2018:22:17:00sdfafPoint.2.3sadfagopt1:"10"fdsfopt2:"54"fsdfs
+2018:22:17:00adgauighuajiang ui au oh oashdoah  dhaoshdo
 https://wkbjbos.bdimg.com/v1/docconvert8854//wk/00ee67dec8
 4a0d86a3d997a301472def/0.
 json?responseCacheControl=max-ag

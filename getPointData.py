@@ -25,14 +25,21 @@ def get_point(sourcePath):
             score = pointList.group(1)
             s1 = pointList.group(2)
             s2 = pointList.group(3)
+            s1 = float(s1)
+            s2 = float(s2)
+            #2次score的差
+            #if(score)
+            #diff_s1 = s1 - previous_s1
+            #diff_s2 = s2 - previous_s2
 
-            pointLists.append((float(score), float(s1), float(s2)))
-            
-        #pointList.append()
+            pointLists.append([float(score), s1, s2])
+            previous_s1 = s1
+            previous_s2 = s2
+            #pointList.append()
         #print(line)
         #return line
     fR.close()
-    print("pointList:", pointList)
+    #print("pointList:", pointList)
     return pointLists
 
 
@@ -46,7 +53,7 @@ def listSort(lists):
     #operator.itemgetter排序，0表示第一个维度，1表示第二维度
     #lists.sort(key=operator.itemgetter(0))
     lists.sort(key=lambda x:(x[0]))
-    print("lists:", lists)
+    #print("lists:", lists)
     return lists
 
 #把原有的格式list[(1,2,3)]转化成dict，{'key':1,'value':(1,2,3)}
@@ -79,3 +86,34 @@ def groupLists(lists):
 			#print("value:", value['value'])
 		groupValue.append(v)		
 	return (groupName,groupValue)
+
+"""
+比较opt1和opt2的变化的差
+"""
+def get_diff(lists):
+    previous_s1 = lists[0][1]
+    previous_s2 = lists[0][2]
+    for list in lists:
+        print(list)
+        #插入前一个值
+        #取出s1,s2的值
+        s1 = list[1]
+        s2 = list[2]
+        #相减取差
+        diff_s1 = s1 - previous_s1
+        diff_s2 = s2 - previous_s2
+        #输出验证differ的结果
+        print("diff_s1:", diff_s1)
+        print("diff_s2:", diff_s2)
+        #插入s1,s2相减取差的值
+        list.append(diff_s1)
+        list.append(diff_s2)
+        #将上次的s1,s2赋值给diff_s1,diff_s2
+        previous_s1 = s1
+        previous_s2 = s2
+    return lists
+
+# if __name__ == '__main__':
+#     lists = get_point('source.txt')
+#     sort_lists = listSort(lists)
+#     get_diff(sort_lists)

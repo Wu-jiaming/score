@@ -85,12 +85,14 @@ def xlsxFilesWrite(xlsxDir, type, headerLists, valueLists):
 		#表示每个xlsx文件里的数据
 		print("b", group[0][a])
 		#print(str(1)+'.xlsx')
-		xlsxFileName = xlsxDir + str(group[0][a])+'.xlsx'
+
+		xlsxFileName = str(group[0][a])+'.xlsx'
+		xlsxFilePath = os.path.join(xlsxDir, xlsxFileName)
 		valueL = group[1][a]
 		print("========")
 		print("valueL:", valueL)
 		print("------------")
-		xlsxChart(xlsxFileName, type , headerLists, valueL)
+		xlsxChart(xlsxFilePath, type , headerLists, valueL)
 
 
 """

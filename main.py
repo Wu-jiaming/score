@@ -1,5 +1,5 @@
 import excelPoint_xlsWriter as ew
-
+import os
 def main():
 	#源文件
 	sourcePath = 'source.txt'
@@ -22,10 +22,10 @@ def main():
 	#输出结果文件的目录
 	dirPath = r"E:\python_code\numpy\resultPath"
 	dirPath = input("ple input the result path:")
-	dirPath = ew.isMakeDir(dirPath) + r'\\'
+	#dirPath = ew.isMakeDir(dirPath) + r'\\'
 	
 	#文本文件result.txt
-	newFilePath = dirPath + r'result.txt'
+	newFilePath = os.path.join(dirPath, 'result.txt')
 	print("newFilePath:", newFilePath)
 	
 	#将数据写入新文件

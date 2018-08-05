@@ -107,20 +107,29 @@ def xlsxChart(fileName, type, headerLists, valueLists):
 	workSheet.set_column('B:B', 30)
 	#设置cell的height，第一行为0，以此为推， 参数1为行数， 参数2为高度
 	workSheet.set_row(2, 60)
+	#设置comment，备注
+	workSheet.write_comment('D1', 'opt1和上一个opt1值之间的变化(opt1-previous_opt1)')
+	workSheet.write_comment('E1', 'opt2和上一个opt2值之间的变化(opt2-previous_opt2)')
 	#Style为粗体，非0为粗体
-	bold = workBook.add_format({'bold': 1})
+	format_header = workBook.add_format({'bold': 1})
 	#标题数据
 	header = headerLists
 	# 真实数据
 	data = valueLists
 	#写入横向数据，一行，'A1'表示位置
-	workSheet.write_row('A1', header, bold )
+	workSheet.write_row('A1', header, format_header )
 	#print("data:", data)
+	#opt1和opt2的差值异常的格式显示为红
+	format_warn = workBook.add_format({'bold': 1,'bg_color':'red'})
 	for index,dataLine in enumerate(data):
 		#print("index:", index, "dataLine:",dataLine)
 		#注意！如果写入的数据为字符串类型，则无法画出相对应的图表！elsx文件里的数据左上角会有小绿点
-		workSheet.write_row('A'+str(index+2), dataLine)
+		if(dataLine[3] >= 10 or dataLine[4] >= 10):
+			workSheet.write_row('A' + str(index + 2), dataLine, format_warn)
+		else:
+			workSheet.write_row('A'+str(index+2), dataLine)
 		print("dataLine:",dataLine)
+		#raise dataLine
 		
 	#写入竖行数据，一竖
 	# workSheet.write_column('A2', data[0])

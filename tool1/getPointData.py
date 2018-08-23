@@ -7,7 +7,6 @@
 import re
 from operator import itemgetter
 from itertools import groupby
-import numpy as np
 
 """
 获取相关节点
@@ -40,10 +39,7 @@ def get_point(sourcePath):
         #print(line)
         #return line
     fR.close()
-    np_pointLists = np.array(pointList)
-    print("pointLists:", pointLists)
-    print("np_pointLists:", type(np_pointLists))
-
+    #print("pointList:", pointList)
     return pointLists
 
 

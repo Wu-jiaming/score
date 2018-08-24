@@ -88,7 +88,7 @@ def groupLists(lists):
 		for value in group:
 			v.append(value['value'])
 			#print("value:", value['value'])
-		groupValue.append(v)		
+		groupValue.append(v)
 	return (groupName,groupValue)
 
 """

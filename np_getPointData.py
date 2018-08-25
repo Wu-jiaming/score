@@ -30,29 +30,32 @@ def get_point(sourcePath):
         #return line
     fR.close()
     np_pointLists = np.array(pointLists)
-    #print("pointLists:", pointLists)
-    #print("np_pointLists:", type(np_pointLists))
-    #print("np_pointLists:", np_pointLists)
     #按列排序，不会修改原数组，按第1列进行排序
     # X[:,0]就是取所有行的第0个数据,
     #如果要按行排序，可以先进行转置，如：np_pointLists.T[np_pointLists.T[:, 0].argsort()].T
     np_pointLists2 = np_pointLists[np_pointLists[:, 0].argsort()]
-    #print("===========================================")
-    #print("修改之后：", np_pointLists2)
-    #print("===========================================")
-    #print("修改之后原来列表：",np_pointLists)
     return np_pointLists2
 
 
-def diff(np_points):
+def get_diff(np_points):
     temp_np_points = np_points
-    print(temp_np_points)
-    print("=============")
     #其实还是指向原本的内存，只是获取不同的内容
-    temp_np_points = temp_np_points[ : ,1: ]
-    print(temp_np_points)
-    temp2_np_points = temp_np_points
-    
+    #opt1&opt2
+    opt_np_points = temp_np_points[:,1:]
+    #每个point的第一个维度
+    first_list = opt_np_points[:1]
+    #assert 0, first_list
+    opt_np_points_v = np.vstack((first_list, opt_np_points))
+    #print("================")
+    #获取opt1&opt2的差值, opt1-opt1_previous, opt2-opt2_previous
+    diff_opt = opt_np_points - opt_np_points_v[:-1]
+    #把2个数组拼起来，vstack((a,b))是竖着拼，hstack((a,b))是横着拼
+    np_points = np.hstack((temp_np_points, diff_opt))
+    print("np_points:", np_points)
+    print("temp_np_points:", temp_np_points)
+    print("np_points:", np_points)
+    return np_points
+
 """
 比较opt1和opt2的变化的差
 """
@@ -81,3 +84,4 @@ def get_diff(lists):
 if __name__ ==  '__main__':
     np_points = get_point(sourcePath='source.txt')
     diff(np_points)
+

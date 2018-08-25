@@ -1,5 +1,6 @@
 import excelPoint_xlsWriter as ew
 import os
+import numpy as np
 def main():
 	#源文件
 	sourcePath = 'source.txt'
@@ -10,14 +11,11 @@ def main():
 	#获取的相对应的数据
 	PointLists = ew.getPointData.get_point(sourcePath)
 
-	#对获取的数据进行排序，必须为数字类型
-	valueLists = ew.getPointData.listSort(PointLists)
-
 	#对获取的opt1，opt2的值进行比较，获取其差
-	diff_lists = ew.getPointData.get_diff(valueLists)
+	diff_lists = ew.getPointData.get_diff(PointLists)
 
 	#xlsx文件的标题
-	headerLists = (('point'), ('opt1'), ('opt2'), ('diff_op1'), ('diff_opt2'))
+	headerLists = np.array([('point'), ('opt1'), ('opt2'), ('diff_op1'), ('diff_opt2')])
 
 	#输出结果文件的目录
 	dirPath = r"E:\python_code\numpy\resultPath"

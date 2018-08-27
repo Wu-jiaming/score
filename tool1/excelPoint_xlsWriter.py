@@ -64,41 +64,62 @@ result.writelines(str(list))这种是没法换行的,这种写法只是自动迭
 def fileWrite(headerLists, valueLists, newFilePath):
     with open(newFilePath, 'w') as result:
         result.write(str(headerLists) + '\n')
+
         for list in valueLists:
             result.write(str(list)+ '\n')
             #result.write(repr(list)+ '\n')
             #result.writelines(list)
+"""
+
+"""
+
 
 """
 根据dict的key值相同，而value值不同，保存多个xlsx文件
 """
-def xlsxFilesWrite(xlsxDir, type, headerLists, valueLists):
+def xlsxFilesWrite(xlsxDir, type, headerLists, valueLists, normal):
 	#group[1]代表着dict的数据
 	#group[0]代表list文件名
 	group = getPointData.groupLists(valueLists)
-	print("-------1233333333-----")
 	print(group)
-	print("-------1233333333-----")
-	for a in range(len(group[1])):
-		#表示每个xlsx文件名
-		print("a", group[1][a])
-		#表示每个xlsx文件里的数据
-		print("b", group[0][a])
-		#print(str(1)+'.xlsx')
+	#如果是异常值则另建一个xlsx
+	if(normal):
+		for a in range(len(group[1])):
+			#表示每个xlsx文件名
+			print("a", group[1][a])
+			#表示每个xlsx文件里的数据
+			print("b", group[0][a])
+			#print(str(1)+'.xlsx')
 
-		xlsxFileName = str(group[0][a])+'.xlsx'
+			xlsxFileName = str(group[0][a])+'.xlsx'
+			xlsxFilePath = os.path.join(xlsxDir, xlsxFileName)
+			valueL = group[1][a]
+			print("========")
+			print("valueL:", valueL)
+			print("------------")
+			xlsxChart(xlsxFilePath, type , headerLists, valueL, True)
+	else:
+		#for a in range(len(group[1])):
+			# # 表示每个xlsx文件名
+			# print("a", group[1][a])
+			# # 表示每个xlsx文件里的数据
+			# print("b", group[0][a])
+			#raise"=============="
+			# print(str(1)+'.xlsx')
+
+		xlsxFileName = 'abnormal.xlsx'
 		xlsxFilePath = os.path.join(xlsxDir, xlsxFileName)
-		valueL = group[1][a]
+		valueL = valueLists
 		print("========")
 		print("valueL:", valueL)
 		print("------------")
-		xlsxChart(xlsxFilePath, type , headerLists, valueL)
+		xlsxChart(xlsxFilePath, type, headerLists, valueL, False)
 
 
 """
 新建xlsx文件，保存数据到excel
 """
-def xlsxChart(fileName, type, headerLists, valueLists):
+def xlsxChart(fileName, type, headerLists, valueLists, normal):
 	#新建一个xlsx文件
 	workBook = xlsxwriter.Workbook(fileName)
 	#新建一个sheet,名字为SheetName
@@ -135,14 +156,16 @@ def xlsxChart(fileName, type, headerLists, valueLists):
 	# workSheet.write_column('A2', data[0])
 	# workSheet.write_column('B2', data[1])
 	# workSheet.write_column('C2', data[2])
-	type = type
-	endIndex = index + 2
-	print("endIndex", endIndex)
-	chart_col = chartType(type, workBook, endIndex)
-	chart_col.set_legend({'delete_series': [2, 3]})
-	#插入图表
-	workSheet.insert_chart('A'+str(endIndex), chart_col, {'x_offset': 25, 'y_offset': 30})
-	workBook.close()
+
+	if(normal):
+		type = type
+		endIndex = index + 2
+		print("endIndex", endIndex)
+		chart_col = chartType(type, workBook, endIndex)
+		chart_col.set_legend({'delete_series': [2, 3]})
+		#插入图表
+		workSheet.insert_chart('A'+str(endIndex), chart_col, {'x_offset': 25, 'y_offset': 30})
+		workBook.close()
 
 """
 在excel表中插入图标的样式

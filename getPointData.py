@@ -8,7 +8,9 @@ import re
 from operator import itemgetter
 from itertools import groupby
 import numpy as np
-
+import pandas as pd
+from pandas import Series, DataFrame
+import time
 """
 获取相关节点
 """
@@ -32,23 +34,52 @@ def get_point(sourcePath):
             #if(score)
             #diff_s1 = s1 - previous_s1
             #diff_s2 = s2 - previous_s2
-
-            pointLists.append([float(score), s1, s2])
+            #for i in range(30000):
+            pointLists.append([score, s1, s2])
             previous_s1 = s1
             previous_s2 = s2
             #pointList.append()
         #print(line)
         #return line
     fR.close()
-    np_pointLists = np.array(pointLists)
+    #groupLists = groupby(pointLists, itemgetter('key'))
+    #print("pointLists:", pointLists)
+    #np_pointLists = np.array(pointLists)
+    # print("type:", np_pointLists.dtype.name)
+    # np_pointLists = np_pointLists.astype(float)
+    # print("np_pointLists:", np_pointLists)
+
     #按列排序，不会修改原数组，按第1列进行排序
     # X[:,0]就是取所有行的第0个数据,
     #如果要按行排序，可以先进行转置，如：np_pointLists.T[np_pointLists.T[:, 0].argsort()].T
-    np_pointLists2 = np_pointLists[np_pointLists[:, 0].argsort()]
-    return np_pointLists2
+    #np_pointLists2 = np_pointLists[np_pointLists[:, 0].argsort()]
+    #return np_pointLists2
+    #print(np_pointLists)
+    df = DataFrame(pointLists, columns=['point', 'opt1', 'opt2'])
+    #print(df)
+    #print("===========")
+    df = df.groupby(df.point)
+    # for name,group in df:
+    #    print("name:", name)
+    #    print("group:", group)
 
+    # print("list(df):", list(df))
+    # df = dict(list(df))
+    # print(df)
+    # print("-------------")
+    # print(DataFrame(df['1.1']))
+    return df
 
-def get_diff(np_points):
+def get_diff_pd(pd_points_groups):
+    for name, group in pd_points_groups:
+        #print(type(np.array(group)))
+        #print(np.array(group).astype(float))
+        #raise ("=========")
+        np_points = np.array(group)
+        get_diff_np(np_points)
+
+def get_diff_np(np_points):
+    #print(np_points)
     temp_np_points = np_points
     #其实还是指向原本的内存，只是获取不同的内容
     #opt1&opt2
@@ -62,7 +93,19 @@ def get_diff(np_points):
     diff_opt = opt_np_points - opt_np_points_v[:-1]
     #把2个数组拼起来，vstack((a,b))是竖着拼，hstack((a,b))是横着拼
     np_points = np.hstack((temp_np_points, diff_opt))
-    print("np_points:", np_points)
-    print("temp_np_points:", temp_np_points)
-    print("np_points:", np_points)
+    #print("np_points:", np_points)
+    #print("temp_np_points:", temp_np_points)
+    #print("np_points:", np_points)
+    print(np_points)
     return np_points
+
+if __name__ == '__main__':
+    #程序开始
+    start = time.clock()
+    a = get_point('source.txt')
+    get_diff_pd(a)
+    #print(a)
+    #程序结束
+    end = time.clock()
+    #程序运行的时间
+    print("程序运行的时间:",end-start)

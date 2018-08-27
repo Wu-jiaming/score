@@ -7,7 +7,8 @@
 import re
 from operator import itemgetter
 from itertools import groupby
-
+import time
+import numpy as np
 """
 获取相关节点
 """
@@ -31,15 +32,19 @@ def get_point(sourcePath):
             #if(score)
             #diff_s1 = s1 - previous_s1
             #diff_s2 = s2 - previous_s2
+            #for i in range(30000):
+            #for i in range(1000):
 
-            pointLists.append([float(score), s1, s2])
+            pointLists.append([score, s1, s2])
+                #pointLists.append([float(score), s1, s2])
             previous_s1 = s1
             previous_s2 = s2
             #pointList.append()
         #print(line)
         #return line
     fR.close()
-    #print("pointList:", pointList)
+    #print("pointLists:", pointLists)
+    #print("np_pointLists:", np.array(pointLists))
     return pointLists
 
 
@@ -93,8 +98,9 @@ def groupLists(lists):
 def get_diff(lists):
     previous_s1 = lists[0][1]
     previous_s2 = lists[0][2]
+    abnormal_lists = []
     for list in lists:
-        print(list)
+        #print(list)
         #插入前一个值
         #取出s1,s2的值
         s1 = list[1]
@@ -102,18 +108,59 @@ def get_diff(lists):
         #相减取差
         diff_s1 = s1 - previous_s1
         diff_s2 = s2 - previous_s2
+
         #输出验证differ的结果
-        print("diff_s1:", diff_s1)
-        print("diff_s2:", diff_s2)
+        #print("diff_s1:", diff_s1)
+        #print("diff_s2:", diff_s2)
         #插入s1,s2相减取差的值
         list.append(diff_s1)
         list.append(diff_s2)
+
+        #把不正常的值的列表取出来
+        diff_s1_abs = abs(diff_s1)
+        diff_s2_abs = abs(diff_s2)
+        if(diff_s1_abs > 5 or diff_s2_abs > 5):
+            #print("diff_s1_abs:", diff_s1_abs)
+            #print("diff_s2_abs:", diff_s2_abs)
+            abnormal_lists.append(list)
+            abnormal_lists.append(list)
+            #print("abnormal_lists:", abnormal_lists)
+
         #将上次的s1,s2赋值给diff_s1,diff_s2
         previous_s1 = s1
         previous_s2 = s2
-    return lists
+    print(lists)
+    return (lists,abnormal_lists)
 
-# if __name__ == '__main__':
-#     lists = get_point('source.txt')
-#     sort_lists = listSort(lists)
-#     get_diff(sort_lists)
+def get_diff_np(np_points):
+    temp_np_points = np.array(np_points)
+    #其实还是指向原本的内存，只是获取不同的内容
+    #opt1&opt2
+    #print(type(temp_np_points))
+    opt_np_points = temp_np_points[:,1:].astype(float)
+    #每个point的第一个维度
+    first_list = opt_np_points[:1]
+    #assert 0, first_list
+    opt_np_points_v = np.vstack((first_list, opt_np_points))
+    #print("================")
+    #获取opt1&opt2的差值, opt1-opt1_previous, opt2-opt2_previous
+    #print("opt_np_points:", opt_np_points)
+    #print("opt_np_points_v[:-1]:", opt_np_points_v[:-1])
+    diff_opt = opt_np_points - opt_np_points_v[:-1]
+    #把2个数组拼起来，vstack((a,b))是竖着拼，hstack((a,b))是横着拼
+    np_points = np.hstack((temp_np_points, diff_opt))
+    #print("np_points:", np_points)
+    #print("temp_np_points:", temp_np_points)
+    #print("np_points:", np_points)
+    print("np_points:", np_points)
+    return np_points
+
+if __name__ == '__main__':
+    start = time.clock()
+    lists = get_point('source.txt')
+    sort_lists = listSort(lists)
+    get_diff(sort_lists)#0.63,0.722,0.74,0.57
+    #get_diff_np(sort_lists)#2.43,2.59,2.24,2.55
+    end = time.clock()
+    #程序运行的时间
+    print("程序运行的时间:",end-start)

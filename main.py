@@ -12,8 +12,11 @@ def main():
 	PointLists = ew.getPointData.get_point(sourcePath)
 
 	#对获取的opt1，opt2的值进行比较，获取其差
-	diff_lists = ew.getPointData.get_diff(PointLists)
-
+	points_tuple = ew.getPointData.get_diff(PointLists)
+	#全部points值
+	points_lists = points_tuple[0]
+	#异常points值
+	abnormal_lists = points_tuple[1]
 	#xlsx文件的标题
 	headerLists = np.array([('point'), ('opt1'), ('opt2'), ('diff_op1'), ('diff_opt2')])
 
@@ -27,7 +30,8 @@ def main():
 	print("newFilePath:", newFilePath)
 	
 	#将数据写入新文件
-	ew.fileWrite(headerLists, diff_lists, newFilePath)
+	ew.fileWrite(headerLists, points_lists, newFilePath)
+	ew.fileWrite(headerLists, abnormal_lists, newFilePath)
 
 	#xlsx文件
 	#xlsxFileName = r'E:\python_code\slsx\numpychart.xlsx'
@@ -37,8 +41,8 @@ def main():
 
 	#写入xlsx文件
 	#xlsxChart(xlsxFileName, chartType, headerLists, diff_lists)
-	ew.xlsxFilesWrite(dirPath, chartType, headerLists, diff_lists)
-	print(diff_lists)
+	ew.xlsxFilesWrite(dirPath, chartType, headerLists, points_lists)
+	print(points_lists)
 
 if __name__ == '__main__':
 	main()

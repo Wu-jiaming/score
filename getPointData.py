@@ -71,12 +71,18 @@ def get_point(sourcePath):
     return df
 
 def get_diff_pd(pd_points_groups):
+    pd_lists = []
     for name, group in pd_points_groups:
         #print(type(np.array(group)))
         #print(np.array(group).astype(float))
         #raise ("=========")
         np_points = np.array(group)
-        get_diff_np(np_points)
+        np_points = get_diff_np(np_points)
+
+        df = DataFrame(np_points, columns=['point', 'opt1', 'opt2', 'diff_opt1', 'diff_opt2'])
+        #print(df)
+        pd_lists.append(df)
+    return pd_lists
 
 def get_diff_np(np_points):
     #print(np_points)
@@ -96,14 +102,22 @@ def get_diff_np(np_points):
     #print("np_points:", np_points)
     #print("temp_np_points:", temp_np_points)
     #print("np_points:", np_points)
-    print(np_points)
+    #print(np_points)
     return np_points
+
+
 
 if __name__ == '__main__':
     #程序开始
     start = time.clock()
-    a = get_point('source.txt')
-    get_diff_pd(a)
+    np_points_group = get_point('source.txt')
+    pd_lists = get_diff_pd(np_points_group)
+    for pd_list in pd_lists:
+        print("df:", pd_list)
+        print("df:", pd_list.at[0, 'point'])
+        point = pd_list.at[0, 'point']
+        csv_file_name = 'point'+ point +'.csv'
+        pd_list.to_csv(csv_file_name)
     #print(a)
     #程序结束
     end = time.clock()

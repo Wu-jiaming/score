@@ -45,7 +45,18 @@ import numpy as np
 # b= np.array( [ [2] , [3] ] )
 # print(a+b)
 
-a = np.arange(5)
-print(a)
-a[[0,0,2]] += 1
-print(a)
+# a = np.arange(5)
+# print(a)
+# a[[0,0,2]] += 1
+# print(a)
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+plt.rc('figure', figsize=(5, 3))#设置图片大小
+ts = pd.Series(np.random.randn(1000), index=pd.date_range('1/1/2000', periods=1000))
+ts = ts.cumsum()
+ts.plot()
+plt.show()
+plt.figure();
+ts.plot(style='k--', label='Series');
+plt.legend()

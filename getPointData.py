@@ -11,6 +11,8 @@ import numpy as np
 import pandas as pd
 from pandas import Series, DataFrame
 import time
+import matplotlib.pyplot as plt
+
 """
 获取相关节点
 """
@@ -105,7 +107,17 @@ def get_diff_np(np_points):
     #print(np_points)
     return np_points
 
-
+def makePlt(pd_list):
+    #plt.rc('figure', figsize=(5,3))
+    df = pd_list.loc[:, ['opt1', 'opt2']]
+    df = DataFrame(df)
+    #print("pd_list[1:2]:", pd_list.loc[:, ['opt1', 'opt2']])
+    #print(pd_list.loc[2:3])
+    #print()
+    df.plot()
+    df.plot(kind='bar')
+    plt.show()
+    raise
 
 if __name__ == '__main__':
     #程序开始
@@ -115,6 +127,7 @@ if __name__ == '__main__':
     for pd_list in pd_lists:
         print("df:", pd_list)
         print("df:", pd_list.at[0, 'point'])
+        makePlt(pd_list)
         point = pd_list.at[0, 'point']
         csv_file_name = 'point'+ point +'.csv'
         pd_list.to_csv(csv_file_name)

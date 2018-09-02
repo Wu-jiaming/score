@@ -12,7 +12,9 @@ import pandas as pd
 from pandas import Series, DataFrame
 import time
 import matplotlib.pyplot as plt
-
+import matplotlib.dates as mdates
+import os
+from datetime import datetime
 """
 获取相关节点
 """
@@ -23,13 +25,15 @@ def get_point(sourcePath):
     pointList = []
     pointLists = []
     for line in lines:
-        pointPattern = re.compile(r'.*?Point\.(.*?)s.*?opt1:"(.*?)".*?opt2:"(.*?)"')
+        pointPattern = re.compile(r'(.*?) point:(.*?) opt1:(.*?) opt2:(.*?)\n')
         pointList = re.match(pointPattern, line)
+        #print(pointList.group(4))
         if pointList is not None:
             #pointLists.append(())
-            score = pointList.group(1)
-            s1 = pointList.group(2)
-            s2 = pointList.group(3)
+            score = pointList.group(2)
+            date = pointList.group(1)
+            s1 = pointList.group(3)
+            s2 = pointList.group(4)
             s1 = float(s1)
             s2 = float(s2)
             #2次score的差
@@ -37,7 +41,7 @@ def get_point(sourcePath):
             #diff_s1 = s1 - previous_s1
             #diff_s2 = s2 - previous_s2
             #for i in range(30000):
-            pointLists.append([score, s1, s2])
+            pointLists.append([score, date, s1, s2])
             previous_s1 = s1
             previous_s2 = s2
             #pointList.append()
@@ -57,7 +61,7 @@ def get_point(sourcePath):
     #np_pointLists2 = np_pointLists[np_pointLists[:, 0].argsort()]
     #return np_pointLists2
     #print(np_pointLists)
-    df = DataFrame(pointLists, columns=['point', 'opt1', 'opt2'])
+    df = DataFrame(pointLists, columns=['point', 'date', 'opt1', 'opt2'])
     #print(df)
     #print("===========")
     df = df.groupby(df.point)
@@ -81,7 +85,7 @@ def get_diff_pd(pd_points_groups):
         np_points = np.array(group)
         np_points = get_diff_np(np_points)
 
-        df = DataFrame(np_points, columns=['point', 'opt1', 'opt2', 'diff_opt1', 'diff_opt2'])
+        df = DataFrame(np_points, columns=['point', 'date', 'opt1', 'opt2', 'diff_opt1', 'diff_opt2'])
         #print(df)
         pd_lists.append(df)
     return pd_lists
@@ -91,7 +95,7 @@ def get_diff_np(np_points):
     temp_np_points = np_points
     #其实还是指向原本的内存，只是获取不同的内容
     #opt1&opt2
-    opt_np_points = temp_np_points[:,1:]
+    opt_np_points = temp_np_points[:,2:]
     #每个point的第一个维度
     first_list = opt_np_points[:1]
     #assert 0, first_list
@@ -105,6 +109,7 @@ def get_diff_np(np_points):
     #print("temp_np_points:", temp_np_points)
     #print("np_points:", np_points)
     #print(np_points)
+    #print("np_points:", type(np_points))
     return np_points
 
 def makePlt(pd_list):
@@ -113,24 +118,49 @@ def makePlt(pd_list):
     df = DataFrame(df)
     #print("pd_list[1:2]:", pd_list.loc[:, ['opt1', 'opt2']])
     #print(pd_list.loc[2:3])
-    #print()
-    df.plot()
-    df.plot(kind='bar')
+    #print("pd_list:", pd_list)
+    #np_lists = np.array(pd_lists)
+    #print(np_lists)
+    plt.figure()
+    y = df
+    # 生成横纵坐标信息
+    dates = pd_list.loc[:, ['date']]
+    np_dates = np.array(dates)
+    list_dates = np_dates.tolist()
+    # 生成横纵坐标信息
+    dates = ['2018-08-31 18:24:32', '2018-08-31 18:26:32', '2018-08-31 18:28:32']
+    xs = [datetime.strptime(d[0], '%Y-%m-%d %H:%M:%S') for d in np_dates]
+    print("xs:", xs)
+    ys = range(len(xs))
+    # 配置横坐标
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
+    #以天为时间间隔
+    plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=5))
+    #plt.xticks(pd.date_range(list_dates[0][0], list_dates[-1][0], freq='1440min'))
+    # Plot
+    plt.plot(xs, y)
+    plt.gcf().autofmt_xdate()  # 自动旋转日期标记
+    plt.show()
+
+    # df.plot(kind='bar')
     plt.show()
     raise
 
 if __name__ == '__main__':
     #程序开始
     start = time.clock()
-    np_points_group = get_point('source.txt')
+    np_points_group = get_point('source2.txt')
     pd_lists = get_diff_pd(np_points_group)
     for pd_list in pd_lists:
         print("df:", pd_list)
         print("df:", pd_list.at[0, 'point'])
-        makePlt(pd_list)
         point = pd_list.at[0, 'point']
-        csv_file_name = 'point'+ point +'.csv'
+        makePlt(pd_list)
+
+        csv_file_name = os.getcwd() + '\csv\\'+ point + '.csv'
         pd_list.to_csv(csv_file_name)
+    #print(type(pd_lists))
+
     #print(a)
     #程序结束
     end = time.clock()

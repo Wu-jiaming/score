@@ -113,14 +113,8 @@ def get_diff_np(np_points):
     return np_points
 
 def makePlt(pd_list):
-    #plt.rc('figure', figsize=(5,3))
     df = pd_list.loc[:, ['opt1', 'opt2']]
     df = DataFrame(df)
-    #print("pd_list[1:2]:", pd_list.loc[:, ['opt1', 'opt2']])
-    #print(pd_list.loc[2:3])
-    #print("pd_list:", pd_list)
-    #np_lists = np.array(pd_lists)
-    #print(np_lists)
     plt.figure()
     y = df
     # 生成横纵坐标信息
@@ -130,7 +124,9 @@ def makePlt(pd_list):
     # 生成横纵坐标信息
     dates = ['2018-08-31 18:24:32', '2018-08-31 18:26:32', '2018-08-31 18:28:32']
     xs = [datetime.strptime(d[0], '%Y-%m-%d %H:%M:%S') for d in np_dates]
-    print("xs:", xs)
+    #xs = [d[0] for d in np_dates]#如果只有这个，而没有对字符串进行date格式的转换，生成的图表x轴为空
+    # print("xs:", xs)
+    # print("xs:", xs)
     ys = range(len(xs))
     # 配置横坐标
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
@@ -138,12 +134,13 @@ def makePlt(pd_list):
     plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=5))
     #plt.xticks(pd.date_range(list_dates[0][0], list_dates[-1][0], freq='1440min'))
     # Plot
+    plt.title('opt1&opt2 values')
+    plt.xlabel('time')
+    plt.ylabel('opt')
     plt.plot(xs, y)
     plt.gcf().autofmt_xdate()  # 自动旋转日期标记
     plt.show()
 
-    # df.plot(kind='bar')
-    plt.show()
     raise
 
 if __name__ == '__main__':
